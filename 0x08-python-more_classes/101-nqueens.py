@@ -1,56 +1,50 @@
 #!/usr/bin/python3
+'''Module for N Queens problem.'''
 
-"""
-module for calculation of n-queens problem
-"""
-import sys
 
-class Solution_Board:
-    """class for use with n queens problem
-    """
-    solutions = []
+def isSafe(board, row, col):
+    '''Checks if position is safe from attack.
+    Args:
+        board: The board state.
+        row: The row to check.
+        col: The colum to check.
+    '''
+    for c in range(col):
+        if board[c] is row or abs(board[c] - row) is abs(c - col):
+            return False
+    return True
 
-    def __init__(self, num):
-        self.num = num
 
-    @property
-    def num(self):
-        return self.__num
+def checkBoard(board, col):
+    '''Checks the board state column by column using backtracking.
+    Args:
+        board: The board state.
+        col: The current colum to check.
+    '''
+    n = len(board)
+    if col is n:
+        print(str([[c, board[c]] for c in range(n)]))
+        return
 
-    @num.setter
-    def num(self, value):
-        if not isinstance(num, int):
-            raise TypeError("num should be an int")
-        self.__num = value
+    for row in range(n):
+        if isSafe(board, row, col):
+            board[col] = row
+            checkBoard(board, col + 1)
 
-args = sys.argv
+if __name__ == "__main__":
+    import sys
 
-if len(args) != 2:
-    exit(1)
-if not args[1].isdigit():
-    print("N must be a number")
-    exit(1)
-
-num = int(args[1])
-if num < 4:
-    print("N must be at least 4")
-    exit(1)
-
-solutions = []
-board = [[0 for a in range(0, num)] for b in range(0, num)]
-running = True
-while running:
-    sol = get_n_queens(board)
-    solutions.append(sol)
-    running = False
-
-def get_n_queens(chess_board, column, num):
-    if column >= num:
-        return True
-    for i in range(0, num):
-        if board_safe(chess_board, column):
-            chess_board[i][column] = 1
-            if get_n_queens(chess_board, column + 1):
-                return True
-            board[i][column] = 0
-    return False
+    if len(sys.argv) != 2:
+        print("Usage: nqueens N")
+        sys.exit(1)
+    n = 0
+    try:
+        n = int(sys.argv[1])
+    except:
+        print("N must be a number")
+        sys.exit(1)
+    if n < 4:
+        print("N must be at least 4")
+        sys.exit(1)
+    board = [0 for col in range(n)]
+    checkBoard(board, 0)
