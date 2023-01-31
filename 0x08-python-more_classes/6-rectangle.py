@@ -2,30 +2,29 @@
 """
 A rectangle with width and height.
 """
-
-
 class Rectangle:
+    """Defines a rectangle
     """
-    Rectangle functions and data
-    """
+    number_of_instances = 0
 
     def __init__(self, width=0, height=0):
-        """ Instantiation
+        """Instantiation
         """
         self.width = width
         self.height = height
+        type(self).number_of_instances += 1
 
     @property
     def width(self):
-        """ Getter for width
+        """Getter method
         """
         return self.__width
 
     @width.setter
     def width(self, value):
-        """ Setter for width
+        """"Setter method
         """
-        if type(value) != int:
+        if type(value) is not int:
             raise TypeError("width must be an integer")
         if value < 0:
             raise ValueError("width must be >= 0")
@@ -33,44 +32,50 @@ class Rectangle:
 
     @property
     def height(self):
-        """ Getter for height
+        """Getter method
         """
         return self.__height
 
     @height.setter
     def height(self, value):
-        """ Setter for height
+        """Setter method
         """
-        if type(value) != int:
-            raise TypeError("width must be an integer")
+        if type(value) is not int:
+            raise TypeError("height must be an integer")
         if value < 0:
             raise ValueError("height must be >= 0")
         self.__height = value
 
-    # Functions
     def area(self):
-        """ Returns area of rectangle
+        """Rectangle area
         """
         return self.__width * self.__height
 
     def perimeter(self):
-        """ Returns perimeter of rectangle
+        """Rectangle perimeter
         """
         if self.__width == 0 or self.__height == 0:
             return 0
-        else:
-            return 2 * (self.__width + self.__height)
+        return 2 * (self.__width + self.__height)
 
     def __str__(self):
-        """ print() __str__ method funtion to return rectangle in char '#'
+        """Creates a new string object from the given object
         """
-        res = ""
-        if self.__width == 0 or self.__height == 0:
-            return res
+        s = ''
+        if self.__width > 0 and self.__height > 0:
+            for _ in range(self.__height):
+                for _ in range(self.__width):
+                    s += '#'
+                s += '\n'
+        return s[: -1]
 
-        for i in range(self.__height):
-            if i == self.__height - 1:
-                res += ('#' * self.__width)
-            else:
-                res += (('#' * self.__width) + '\n')
-        return res
+    def __repr__(self):
+        """Canonical string representation of the object
+        """
+        return 'Rectangle({}, {})'.format(self.__width, self.__height)
+
+    def __del__(self):
+        """Prints on instance delete
+        """
+        print("Bye rectangle...")
+        type(self).number_of_instances -= 1
