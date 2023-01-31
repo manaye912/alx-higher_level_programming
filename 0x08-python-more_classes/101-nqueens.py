@@ -1,60 +1,56 @@
 #!/usr/bin/python3
+
 """
-N queens backtracking program to print the coordinates of N queens
-on an NxN grid such that they are all in non-attacking positions
+module for calculation of n-queens problem
 """
-from sys import argv
+import sys
 
-if __name__ == "__main__":
-    a = []
-    if len(argv) != 2:
-        print("Usage: nqueens N")
-        exit(1)
-    if argv[1].isdigit() is False:
-        print("N must be a number")
-        exit(1)
-    n = int(argv[1])
-    if n < 4:
-        print("N must be at least 4")
-        exit(1)
+class Solution_Board:
+    """class for use with n queens problem
+    """
+    solutions = []
 
-    # initialize the answer list
-    for i in range(n):
-        a.append([i, None])
+    def __init__(self, num):
+        self.num = num
 
-    def already_exists(y):
-        """check that a queen does not already exist in that y value"""
-        for x in range(n):
-            if y == a[x][1]:
-                return True
-        return False
+    @property
+    def num(self):
+        return self.__num
 
-    def reject(x, y):
-        """determines whether or not to reject the solution"""
-        if (already_exists(y)):
-            return False
-        i = 0
-        while(i < x):
-            if abs(a[i][1] - y) == abs(i - x):
-                return False
-            i += 1
+    @num.setter
+    def num(self, value):
+        if not isinstance(num, int):
+            raise TypeError("num should be an int")
+        self.__num = value
+
+args = sys.argv
+
+if len(args) != 2:
+    exit(1)
+if not args[1].isdigit():
+    print("N must be a number")
+    exit(1)
+
+num = int(args[1])
+if num < 4:
+    print("N must be at least 4")
+    exit(1)
+
+solutions = []
+board = [[0 for a in range(0, num)] for b in range(0, num)]
+running = True
+while running:
+    sol = get_n_queens(board)
+    solutions.append(sol)
+    running = False
+
+def get_n_queens(chess_board, column, num):
+    if column >= num:
         return True
-
-    def clear_a(x):
-        """clears the answers from the point of failure on"""
-        for i in range(x, n):
-            a[i][1] = None
-
-    def nqueens(x):
-        """recursive backtracking function to find the solution"""
-        for y in range(n):
-            clear_a(x)
-            if reject(x, y):
-                a[x][1] = y
-                if (x == n - 1):  # accepts the solution
-                    print(a)
-                else:
-                    nqueens(x + 1)  # moves on to next x value to continue
-
-    # start the recursive process at x = 0
-    nqueens(0)
+    for i in range(0, num):
+        if board_safe(chess_board, column):
+            chess_board[i][column] = 1
+            if get_n_queens(chess_board, column + 1):
+                return True
+            board[i][column] = 0
+    return False
