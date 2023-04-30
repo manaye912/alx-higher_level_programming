@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 '''
-Script that fetches https://intranet.hbtn.io/status
+Script that fetches https://alx-intranet.hbtn.io/status
 '''
 from urllib import request
 
-url = 'https://intranet.hbtn.io/status'
+url = 'https://alx-intranet.hbtn.io/status'
 with request.urlopen(url) as response:
     the_page = response.read()
     print('Body response:')
